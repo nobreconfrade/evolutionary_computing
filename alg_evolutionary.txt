@@ -1,0 +1,36 @@
+Alguns algoritmos evolucionarios
+
+Uma coisa notada é que os algoritmos de computação evolucionaria são divididos em
+"multi-objective evolutionary algorithms" ou MOEAs e "single-objective
+evolutionary algorithms".
+
+Existem 5 grupos de taxonomia de aplicação, são eles:
+ - Otimização de portifolio de investimento
+ - "Financial time series"
+ - Ranking de ações
+ - Analise de risco
+ - Modelagem economica
+
+Alguns algoritmos usados:
+
+ - Algoritmo genéticos com função de peso linear. O peso é chamado de
+ coeficiente de "trade-off". O algoritmo genético é um algoritmo de otimização.
+
+ - Alguns algoritmos não evolutivos como busca local otimizada, simulated
+ anneling, ant cluster optimization.
+
+ - Uma variante do algoritmo genético, o "Target Objective Genetic Algorithm"
+ (TOGA) que é baseada em goal programming e "Vector Evaluated Genetic Algorithms"
+
+Outro artigo trás vários algoritmos MOEAs analisados:
+
+ - AbYSS
+ - FastPGA
+ - Indicator-Based Evolutionary Algortihm (IBEA)
+ - MOCeLL
+ - MOEA Baseado em Decomposição
+ - Multiobjective Genetic Algorithm (MOGA)
+ - Nondominated Sorting Genetic Algorithm (NSGA)
+ - NSGA-II
+ - Pareto Archived Evolution Strategy (PAES)
+ - Strength Pareto Evolutionary Algorithm 2 (SPEA2)
