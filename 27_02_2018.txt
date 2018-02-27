@@ -1,0 +1,14 @@
+O cromossomos é um conjunto de genes que táis genes são as variáveis do programa.
+
+Uma população de soluções implica em busca paralela, onde existe a:
+ - Implícita onde cada geração da população possui várias soluções para o problema
+ - Explícito onde a função de fitness é espalhada entre várias maquinas ou nucleos,
+ como em programação pararela.
+
+Na função fitness:
+Aplicação de penalidades gradativas de acordo com a violação de restrições
+
+A função fitness, caso não tenha restrições e bonificações, pode ter o mesmo
+valor da função objetivo.
+
+ 

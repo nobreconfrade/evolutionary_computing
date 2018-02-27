@@ -34,3 +34,10 @@ Outro artigo trás vários algoritmos MOEAs analisados:
  - NSGA-II
  - Pareto Archived Evolution Strategy (PAES)
  - Strength Pareto Evolutionary Algorithm 2 (SPEA2)
+
+Tais algoritmos tem em comum:
+ - Estocástico, envolvem probabilidade
+ - Seleção, rotina, crossover.
+
+Diferenças entre os algoritimos:
+ - Codificação do domínio (tipo de população)
