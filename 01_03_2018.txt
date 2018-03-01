@@ -1,0 +1,5 @@
+O algoritmo evolutivo faz um melhoramento iterativo e interativo, o iterativo é de
+geração por geração, a interação é com o crossover.
+
+Algoritmos evolutivos são algoritmos de melhoria, os melhores deles eviram o
+máximo possível as restrições.
