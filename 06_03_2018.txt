@@ -1,0 +1,32 @@
+exons vs introns
+ codificante vs não codificante
+ unico algoritmo visto que usa introns é a programação por codificação genica
+
+individuos podem ter mais de um cromossomo
+ multicromossomos podem ser usados para problemas dinamicos (eg: pode ter memoria)
+
+seleção
+ guia o algoritmo, papel de garantir que o alg nao seja aleatorio
+
+elitismo
+ usar pode fazer convergir muito rapido
+ não usar elitismo pode favorecer a quebra do melhor individuo
+ usar elitismo é pratica comum
+
+pressao seletiva
+ alta: diversidade genetica cai, melhores insividuos são muito priorizados
+ baixa: individuos tem chances mais equalitarias de escolha, mantem diversidade genetica
+
+diversidade:
+ dita o qaunto os individuos estao espalhados no ambiente
+
+Inicio: diveridade alta, pressao seletiva baixa
+Final: diversidade baixa, pressao seletiva alta
+
+curse of dimensionality
+
+numero de individuos tem que ser maior do que o numero de dimensões - para pequenas dimensões
+numero de individuos muito grande pode se tornar pesado demais computacionalmente
+normalmente o máximo do máximo é 100 (de 50 a 100, geralmente) indivíduos (sem usar gpu)
+
+inteiro, binario, real - geral população inicial
