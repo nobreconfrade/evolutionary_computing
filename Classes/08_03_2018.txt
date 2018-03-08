@@ -1,0 +1,2 @@
+Porque é necessário ter diversidade no sistema de alg. genetico?
+- Para explorar com melhor eficiencia o espaço de busca.
