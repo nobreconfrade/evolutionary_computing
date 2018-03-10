@@ -19,7 +19,21 @@ def populate():
             population.append(sample(range(0,cromoPopulation),cromoPopulation))
     return
 
-def diversity(inertia):
+def diversity(diversityValue):
+    if typePopulation == 1:
+        # METHOD: Moment of Inertia http://www.joinville.udesc.br/portal/professores/parpinelli/materiais/MomentOf_Inertia_Diversity___EA_01.pdf
+        centroid = []
+        for i in range (cromoPopulation):
+            aux = 0
+            for j in range (nPopulation):
+                aux += population[j][i]
+            aux = aux/nPopulation
+            centroid.append(aux)
+        for i in range (cromoPopulation):
+            for j in range(nPopulation):
+                diversityValue += (population[j][i] - centroid[i])**2
+        diversityValue = diversityValue*nPopulation
+
     if typePopulation == 3:
         # METHOD: Moment of Inertia http://www.joinville.udesc.br/portal/professores/parpinelli/materiais/MomentOf_Inertia_Diversity___EA_01.pdf
         centroid = []
@@ -31,8 +45,9 @@ def diversity(inertia):
             centroid.append(aux)
         for i in range (cromoPopulation):
             for j in range(nPopulation):
-                 inertia += (population[j][i] - centroid[i])**2
-    return inertia
+                 diversityValue += (population[j][i] - centroid[i])**2
+
+    return diversityValue
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL e 4-INTPERM:")
 if typePopulation != 1 and typePopulation != 4:
@@ -42,11 +57,11 @@ nPopulation = input("Escolha a quantidade de individuos:")
 cromoPopulation = input("Escolha o tamanho do cromossomo:")
 
 population = []
-inertia = 0
+diversityValue = 0
 
 #  MAIN LOOP
 populate()
 print(population)
-inertia=diversity(inertia)
-print(inertia)
+diversityValue=diversity(diversityValue)
+print(diversityValue)
 # END MAIN LOOP
