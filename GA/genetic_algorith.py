@@ -33,6 +33,17 @@ def diversity(diversityValue):
             for j in range(nPopulation):
                 diversityValue += (population[j][i] - centroid[i])**2
         diversityValue = diversityValue*nPopulation
+        return diversityValue
+
+    if typePopulation == 2 or typePopulation == 4:
+        for i in range(nPopulation-1):
+            for j in range(i+1,nPopulation):
+                aux = zip(population[i],population[j])
+                soma = 0
+                for k in range(cromoPopulation):
+                    soma += abs(aux[k][0] - aux[k][1])
+                diversityValue += soma
+        return diversityValue
 
     if typePopulation == 3:
         # METHOD: Moment of Inertia http://www.joinville.udesc.br/portal/professores/parpinelli/materiais/MomentOf_Inertia_Diversity___EA_01.pdf
@@ -46,8 +57,7 @@ def diversity(diversityValue):
         for i in range (cromoPopulation):
             for j in range(nPopulation):
                  diversityValue += (population[j][i] - centroid[i])**2
-
-    return diversityValue
+        return diversityValue
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL e 4-INTPERM:")
 if typePopulation != 1 and typePopulation != 4:
