@@ -19,7 +19,7 @@ def populate():
             population.append(sample(range(0,chromoPopulation),chromoPopulation))
     return
 
-def diversity_calcule():
+def diversity_calc():
     diversityValue = 0
     # if typePopulation == 1:
     #     # METHOD: Moment of Inertia http://www.joinville.udesc.br/portal/professores/parpinelli/materiais/MomentOf_Inertia_Diversity___EA_01.pdf
@@ -63,8 +63,14 @@ def diversity_standarlization():
 # put the standarlization function for diversity here
     return
 
-def fitness():
-    
+def fitness_calc():
+    if typePopulation == 1:
+        for i in range(nPopulation):
+            aux = 0
+            for j in range(chromoPopulation-1):
+                if population[i][j] != population[i][j+1]:
+                    aux += 1
+            fitness.append(aux)
     return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL e 4-INTPERM:")
@@ -87,13 +93,15 @@ chromoPopulation = int(chromoPopulation)
 population = []
 # population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
 diversity = []
+fitness = []
 # END VARIABLES
 
 #  MAIN LOOP
 populate()
-# print(population)
-diversity.append(diversity_calcule())
+print(population)
+diversity.append(diversity_calc())
 diversity_standarlization()
 # print(diversity)
-fitness()
+fitness_calc()
+print(fitness)
 # END MAIN LOOP
