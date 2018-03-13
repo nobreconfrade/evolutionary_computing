@@ -71,6 +71,15 @@ def fitness_calc():
                 if population[i][j] != population[i][j+1]:
                     aux += 1
             fitness.append(aux)
+    if typePopulation == 2 or typePopulation == 4:
+        pass
+    if typePopulation == 3:
+        for i in range(nPopulation):
+            aux = 0
+            for j in range(chromoPopulation-1):
+                if (int(population[i][j]%2)==0 and int(population[i][j+1]%2)==1) or (int(population[i][j]%2)==1 and int(population[i][j+1]%2)==0):
+                    aux += 1
+            fitness.append(aux)
     return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL e 4-INTPERM:")
