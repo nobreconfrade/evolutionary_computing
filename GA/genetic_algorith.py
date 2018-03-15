@@ -1,4 +1,5 @@
 from random import *
+from math import *
 
 def populate():
     for i in range(nPopulation):
@@ -72,7 +73,13 @@ def fitness_calc():
                     aux += 1
             fitness.append(aux)
     if typePopulation == 2 or typePopulation == 4:
-        pass
+        for i in range(nPopulation):
+            firstSum = 0
+            secondSum = 0
+            for c in population[i]:
+        	    firstSum += c**2.0
+        	    secondSum += cos(2.0*pi*c)
+            fitness.append(-20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e)
     if typePopulation == 3:
         for i in range(nPopulation):
             aux = 0
