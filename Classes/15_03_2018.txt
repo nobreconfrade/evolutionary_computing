@@ -1,0 +1,3 @@
+Na codificação de real para binário, a primeira coisa a se fazer é definir a
+precisão da codificação. Depois você deve fazer a discretização da área do
+domínio.
