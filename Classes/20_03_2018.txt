@@ -1,0 +1,4 @@
+-2,0000 até 2,9999
+2**3 pra antes da virgula, 2**14 pra parte decimal
+
+o tamanho do individuo deve ser de 17 bits
