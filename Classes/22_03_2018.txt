@@ -1,0 +1,6 @@
+Obj: max. lucro
+Variáveis:
+  ST = [0..24]
+  LX = [0..16]
+h = ST + 2LX <= 40
+FO = 30ST + 40LX
