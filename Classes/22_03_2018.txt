@@ -4,3 +4,10 @@ Variáveis:
   LX = [0..16]
 h = ST + 2LX <= 40
 FO = 30ST + 40LX
+
+fitness = funcObj + r.h
+r = -1 #r é o coefiente de penalidade
+fitness = funcObj - h
+
+hNormal = max{0, (ST+2LX-40)/16} #o 16 é o maior valor possível para penalizar
+funcObjNormal = (30ST+40LX)/1360 #1360 é o maior valor possível para os genes
