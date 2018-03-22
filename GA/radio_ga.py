@@ -81,11 +81,14 @@ def fitness_calc():
                 secondSum += cos(2.0*pi*c)
             fitness.append(-20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e)
     if typePopulation == 5:
-        # fitness da funcao algebrica para maximizar o valor
-        binPopulation = bin_population_calc()
+        # fitness da funcao do problema da radio
+        bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
+        bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
         for i in range(nPopulation):
-            x = bin_to_real(population[i],0,binPopulation)
-            aux = cos(20*x) - (abs(x)/2) + ((x**3)/4)
+            st = bin_to_real(population[i],0,bin1Population,0)
+            lx = bin_to_real(population[i],bin1Population+1,bin2Population,1)
+            funcObj = (30*st+40*lx)/1360
+            penalty = 
             aux = fitness_standarlization(aux)
             aux = fitness_penalization(aux)
             fitness.append(aux)
@@ -107,12 +110,15 @@ def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
         i+=1
     return i
 
-def bin_to_real(individual,lowerBit,upperBit):
+def bin_to_real(individual,lowerBit,upperBit,typeVariable):
     auxList = []
     for i in range(lowerBit,upperBit):
         auxList.append(individual[i])
     d = int(''.join(map(str,auxList)),2)
-    x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc()) - 1)) * d
+    if typeVariable == 0:
+        x = il1Population + ((sl1Population - il1Population)/float((2**bin_population_calc(il1Population,sl1Population,precisionPopulation)) - 1)) * d
+    if typeVariable == 1:
+        x = il2Population + ((sl2Population - il2Population)/float((2**bin_population_calc(il2Population,sl2Population,precisionPopulation)) - 1)) * d
     return x
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
@@ -148,10 +154,10 @@ binPopulation = 0
 populate()
 print(population)
 print("---------------------------------\n")
-# diversity.append(diversity_calc())
-# diversity_standarlization()
-# # print(diversity)
-# fitness_calc()
-# print(fitness)
+diversity.append(diversity_calc())
+diversity_standarlization()
+# print(diversity)
+fitness_calc()
+print(fitness)
 
 # END MAIN LOOP
