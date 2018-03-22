@@ -20,8 +20,9 @@ def populate():
         if typePopulation == 4:
             population.append(sample(range(0,chromoPopulation),chromoPopulation))
         if typePopulation == 5:
-            binPopulation = bin_population_calc()
-            for j in range(binPopulation):
+            bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
+            bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
+            for j in range(bin1Population+bin2Population):
                 individual.append(randint(0,1))
             population.append(individual)
     return
@@ -99,7 +100,7 @@ def fitness_standarlization(x):
 def fitness_penalization(x):
     return x
 
-def bin_population_calc():
+def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
     i = 0
     domainRange = ((slPopulation - ilPopulation) + 1)/ 10**-precisionPopulation
     while domainRange > 2**i:
@@ -116,22 +117,23 @@ def bin_to_real(individual,lowerBit,upperBit):
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
-if typePopulation != 1 and typePopulation != 4:
-    ilPopulation = input("Escolha uma limite inferior:\n")
-    slPopulation = input("Escolha uma limite superior:\n")
+il1Population = input("Escolha uma limite inferior primeira variavel:\n")
+sl1Population = input("Escolha uma limite superior primeira variavel:\n")
+il2Population = input("Escolha uma limite inferior segunda variavel:\n")
+sl2Population = input("Escolha uma limite superior segunda variavel:\n")
 nPopulation = input("Escolha a quantidade de individuos:\n")
 chromoPopulation = input("Escolha o tamanho do cromossomo:\n")
 if typePopulation == 5:
     precisionPopulation = input("Escolha a precisão da codificação:\n")
 
 # CAST
-if typePopulation != 1 and typePopulation != 4:
-    ilPopulation = int(ilPopulation)
-    slPopulation = int(slPopulation)
+il1Population = int(il1Population)
+sl1Population = int(sl1Population)
+il2Population = int(il2Population)
+sl2Population = int(sl2Population)
 nPopulation = int(nPopulation)
 chromoPopulation = int(chromoPopulation)
-if typePopulation == 5:
-    precisionPopulation = int(precisionPopulation)
+precisionPopulation = int(precisionPopulation)
 # END CAST
 
 # VARIABLES
@@ -146,10 +148,10 @@ binPopulation = 0
 populate()
 print(population)
 print("---------------------------------\n")
-diversity.append(diversity_calc())
-diversity_standarlization()
-# print(diversity)
-fitness_calc()
-print(fitness)
+# diversity.append(diversity_calc())
+# diversity_standarlization()
+# # print(diversity)
+# fitness_calc()
+# print(fitness)
 
 # END MAIN LOOP
