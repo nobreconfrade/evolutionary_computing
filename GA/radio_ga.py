@@ -82,15 +82,15 @@ def fitness_calc():
             fitness.append(-20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e)
     if typePopulation == 5:
         # fitness da funcao do problema da radio
-        bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
-        bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
         for i in range(nPopulation):
             st = bin_to_real(population[i],0,bin1Population,0)
-            lx = bin_to_real(population[i],bin1Population+1,bin2Population,1)
+            lx = bin_to_real(population[i],bin1Population+1,bin2Population+bin1Population,1)
             funcObj = (30*st+40*lx)/1360
-            penalty = 
-            aux = fitness_standarlization(aux)
-            aux = fitness_penalization(aux)
+            penalty = 0
+            if st+2*lx > 40:
+                penalty = (st+2*lx)/16
+            r = -1
+            aux = funcObj + r*penalty
             fitness.append(aux)
     return
 
@@ -116,9 +116,9 @@ def bin_to_real(individual,lowerBit,upperBit,typeVariable):
         auxList.append(individual[i])
     d = int(''.join(map(str,auxList)),2)
     if typeVariable == 0:
-        x = il1Population + ((sl1Population - il1Population)/float((2**bin_population_calc(il1Population,sl1Population,precisionPopulation)) - 1)) * d
+        x = il1Population + ((sl1Population - il1Population)/float((2**bin1Population) - 1)) * d
     if typeVariable == 1:
-        x = il2Population + ((sl2Population - il2Population)/float((2**bin_population_calc(il2Population,sl2Population,precisionPopulation)) - 1)) * d
+        x = il2Population + ((sl2Population - il2Population)/float((2**bin2Population) - 1)) * d
     return x
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
@@ -147,13 +147,16 @@ population = []
 # population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
 diversity = []
 fitness = []
-binPopulation = 0
+bin1Population = 0
+bin2Population = 0
 # END VARIABLES
 
 #  MAIN LOOP
 populate()
 print(population)
 print("---------------------------------\n")
+bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
+bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
 diversity.append(diversity_calc())
 diversity_standarlization()
 # print(diversity)
