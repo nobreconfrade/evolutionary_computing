@@ -92,7 +92,7 @@ def fitness_calc():
 
 def fitness_standarlization(x):
     # standarlization for algebra function problem
-    # x = (4 + x)/(2 + 4)
+    x = (4 + x)/(2 + 4)
     # standarlization for radio problem
     return x
 
@@ -113,6 +113,19 @@ def bin_to_real(individual,lowerBit,upperBit):
     d = int(''.join(map(str,auxList)),2)
     x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc()) - 1)) * d
     return x
+
+def selection():
+    roulette()
+    # tournament()
+    return
+
+def roulette():
+
+    return
+
+def tournament():
+
+    return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
@@ -151,5 +164,6 @@ diversity_standarlization()
 # print(diversity)
 fitness_calc()
 print(fitness)
+# selection()
 
 # END MAIN LOOP
