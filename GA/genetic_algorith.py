@@ -1,6 +1,7 @@
 from random import *
 from math import *
 from sys import *
+import numpy
 
 def populate():
     for i in range(nPopulation):
@@ -85,15 +86,14 @@ def fitness_calc():
         for i in range(nPopulation):
             x = bin_to_real(population[i],0,binPopulation)
             aux = cos(20*x) - (abs(x)/2) + ((x**3)/4)
-            aux = fitness_standarlization(aux)
+            aux = fitness_standard_alg(aux)
             aux = fitness_penalization(aux)
             fitness.append(aux)
     return
 
-def fitness_standarlization(x):
+def fitness_standard_alg(x):
     # standarlization for algebra function problem
     x = (4 + x)/(2 + 4)
-    # standarlization for radio problem
     return x
 
 def fitness_penalization(x):
@@ -114,14 +114,41 @@ def bin_to_real(individual,lowerBit,upperBit):
     x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc()) - 1)) * d
     return x
 
-def selection():
-    roulette()
+def selection(newPopulation):
+    newPopulation = []
+    newPopulation = roulette(newPopulation)
     # tournament()
+    # print(newPopulation)
     return
 
-def roulette():
-
-    return
+def roulette(newPopulation):
+    for pop in range(nPopulation):
+        fitnessSum = 0
+        fitnessProb = []
+        for i,val in enumerate(fitness):
+            if pop%2 == 1:
+                if i == skip:
+                    fitnessSum += 0
+                else:
+                    fitnessSum += val
+            else:
+                fitnessSum += val
+        for i,val in enumerate(fitness):
+            if pop%2 == 1:
+                if i == skip:
+                    fitnessProb.append(0)
+                else:
+                    fitnessProb.append(i/fitnessSum)
+            else:
+                fitnessProb.append(i/fitnessSum)
+        l = numpy.cumsum(fitnessProb)
+        tip = uniform(0,l[len(l)-1])
+        for i,val in enumerate(l):
+            if tip <= val:
+                skip = i
+                newPopulation.append(population[i])
+                break
+    return newPopulation
 
 def tournament():
 
@@ -152,6 +179,7 @@ population = []
 # population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
 diversity = []
 fitness = []
+newPopulation = []
 binPopulation = 0
 # END VARIABLES
 
@@ -164,6 +192,6 @@ diversity_standarlization()
 # print(diversity)
 fitness_calc()
 print(fitness)
-# selection()
+selection(newPopulation)
 
 # END MAIN LOOP
