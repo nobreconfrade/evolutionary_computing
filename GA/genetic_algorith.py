@@ -176,6 +176,16 @@ def tournament(newPopulation):
     return newPopulation
 
 def crossover(newPopulation):
+    if typePopulation == 1:
+
+    if typePopulation == 2:
+
+    if typePopulation == 3:
+
+    if typePopulation == 4:
+
+    if typePopulation == 5:
+        
     return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
