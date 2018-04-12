@@ -116,8 +116,10 @@ def bin_to_real(individual,lowerBit,upperBit):
 
 def selection(newPopulation):
     newPopulation = []
+    '''ROULETTE'''
     newPopulation = roulette(newPopulation)
-    # tournament()
+    # '''TOURNAMENT'''
+    # newPopulation = tournament(newPopulation)
     # print(newPopulation)
     return
 
@@ -151,13 +153,30 @@ def roulette(newPopulation):
     return newPopulation
 
 def tournament(newPopulation):
-    k = input("Escolha o tamanho do torneio:\n")
+    k = int(input("Escolha o tamanho do torneio:\n"))
+    indFitness = -1
     for pop in range(nPopulation):
-        l = []
-        for i in range(k):
-            select = randint(0,nPopulation)
-            l.append(population[select])
+        maxFitness = 0
+        if pop%2 == 1:
+            flag = 1
+            while flag:
+                select = sample(range(0,nPopulation),k)
+                if indFitness not in select:
+                    # print("#######################################")
+                    # print("indFitness:",indFitness,"select",select)
+                    # print("#######################################")
+                    flag = 0
+        else:
+            select = sample(range(0,nPopulation),k)
+        for i in select:
+            if maxFitness < fitness[i]:
+                maxFitness = fitness[i]
+                indFitness = i
+        newPopulation.append(population[indFitness])
     return newPopulation
+
+def crossover(newPopulation):
+    return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
@@ -198,4 +217,5 @@ diversity_standarlization()
 fitness_calc()
 print(fitness)
 selection(newPopulation)
+population = crossover(newPopulation)
 # END MAIN LOOP
