@@ -150,9 +150,14 @@ def roulette(newPopulation):
                 break
     return newPopulation
 
-def tournament():
-
-    return
+def tournament(newPopulation):
+    k = input("Escolha o tamanho do torneio:\n")
+    for pop in range(nPopulation):
+        l = []
+        for i in range(k):
+            select = randint(0,nPopulation)
+            l.append(population[select])
+    return newPopulation
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
@@ -193,5 +198,4 @@ diversity_standarlization()
 fitness_calc()
 print(fitness)
 selection(newPopulation)
-
 # END MAIN LOOP
