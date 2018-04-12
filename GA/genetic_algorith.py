@@ -176,8 +176,14 @@ def tournament(newPopulation):
     return newPopulation
 
 def crossover(newPopulation):
+    lfinal = []
     if typePopulation == 1:
-
+        '''SINGLE'''
+        for i in range(0,len(newPopulation),2):
+            cut = randint(1,chromoPopulation)
+            single_cut(cut,newPopulation[i],newPopulation[i+1])
+        # '''DOUBLE'''
+        # '''UNIFORM'''
     if typePopulation == 2:
 
     if typePopulation == 3:
@@ -185,8 +191,24 @@ def crossover(newPopulation):
     if typePopulation == 4:
 
     if typePopulation == 5:
-        
+
+    return lfinal
+
+def single_cut(cut,p1,p2):
+    p1init,p1end = bit_split_single(cut,p1)
+    p2init,p2end = bit_split_single(cut,p2)
+    
     return
+
+def bit_split_single(c,p):
+    initial = []
+    final = []
+    for i in range(chromoPopulation):
+        if i <= c:
+            initial.append(p[i])
+        else:
+            final.append(p[i])
+    return initial,final
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
