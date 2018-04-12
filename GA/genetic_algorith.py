@@ -181,7 +181,9 @@ def crossover(newPopulation):
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             cut = randint(1,chromoPopulation)
-            single_cut(cut,newPopulation[i],newPopulation[i+1])
+            p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
+            lfinal.append(p1)
+            lfinal.append(p2)
         # '''DOUBLE'''
         # '''UNIFORM'''
     if typePopulation == 2:
@@ -197,8 +199,9 @@ def crossover(newPopulation):
 def single_cut(cut,p1,p2):
     p1init,p1end = bit_split_single(cut,p1)
     p2init,p2end = bit_split_single(cut,p2)
-    
-    return
+    p1 = p1init + p2end
+    p2 = p2init + p1end
+    return p1,p2
 
 def bit_split_single(c,p):
     initial = []
