@@ -175,25 +175,52 @@ def tournament(newPopulation):
         newPopulation.append(population[indFitness])
     return newPopulation
 
+def crossover_probability(p):
+    n = uniform(0,1)
+    if (n > p):
+        return False
+    else:
+        return True
+
 def crossover(newPopulation):
     lfinal = []
+    prob = 0.8
     if typePopulation == 1:
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
-            cut = randint(1,chromoPopulation)
-            p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
-            lfinal.append(p1)
-            lfinal.append(p2)
+            if (crossover_probability(prob) == False):
+                pass
+            else:
+                cut = randint(1,chromoPopulation)
+                p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
+                lfinal.append(p1)
+                lfinal.append(p2)
+            # '''DOUBLE'''
+            # '''UNIFORM'''
+    if typePopulation == 2:
+        '''SINGLE'''
+        for i in range(0,len(newPopulation),2):
+            if (crossover_probability(prob) == False):
+                pass
+            else:
+                cut = randint(1,chromoPopulation)
+                p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
+                lfinal.append(p1)
+                lfinal.append(p2)
         # '''DOUBLE'''
         # '''UNIFORM'''
-    if typePopulation == 2:
-
     if typePopulation == 3:
+        '''UNIFORM AVERAGE'''
+        for i in range(0,len(newPopulation),2):
+            if (crossover_probability(prob) == False):
+                pass
+            else:
+
 
     if typePopulation == 4:
-
+        pass
     if typePopulation == 5:
-
+        pass
     return lfinal
 
 def single_cut(cut,p1,p2):
