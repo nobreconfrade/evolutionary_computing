@@ -189,7 +189,8 @@ def crossover(newPopulation):
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
-                pass
+                lfinal.append(newPopulation[i])
+                lfinal.append(newPopulation[i+1])
             else:
                 cut = randint(1,chromoPopulation)
                 p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
@@ -201,7 +202,8 @@ def crossover(newPopulation):
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
-                pass
+                lfinal.append(newPopulation[i])
+                lfinal.append(newPopulation[i+1])
             else:
                 cut = randint(1,chromoPopulation)
                 p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
@@ -213,10 +215,13 @@ def crossover(newPopulation):
         '''UNIFORM AVERAGE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
-                pass
+                lfinal.append(newPopulation[i])
+                lfinal.append(newPopulation[i+1])
             else:
-
-
+                mask = []
+                for i in chromoPopulation:
+                    mask.append(randint(0,1))
+                average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
     if typePopulation == 4:
         pass
     if typePopulation == 5:
@@ -239,6 +244,9 @@ def bit_split_single(c,p):
         else:
             final.append(p[i])
     return initial,final
+
+def average_uniform_calc(m,p1,p2):
+    return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
