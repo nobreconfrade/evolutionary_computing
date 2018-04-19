@@ -116,10 +116,10 @@ def bin_to_real(individual,lowerBit,upperBit):
 
 def selection(newPopulation):
     newPopulation = []
-    '''ROULETTE'''
-    newPopulation = roulette(newPopulation)
-    # '''TOURNAMENT'''
-    # newPopulation = tournament(newPopulation)
+    # '''ROULETTE'''
+    # newPopulation = roulette(newPopulation)
+    '''TOURNAMENT'''
+    newPopulation = tournament(newPopulation)
     # print(newPopulation)
     return newPopulation
 
@@ -236,7 +236,8 @@ def crossover(newPopulation):
                 lfinal.append(newPopulation[i])
                 lfinal.append(newPopulation[i+1])
             else:
-                 cut1,cut2 = sample(range(0,chromoPopulation),2)
+                 cut1,cut2 = sample(range(1,chromoPopulation),2)
+                 print('cuts',cut1,cut2)
                  p1,p2 = pmx(cut1,cut2,newPopulation[i],newPopulation[i+1])
                  lfinal.append(p1)
                  lfinal.append(p2)
@@ -277,20 +278,20 @@ def pmx(c1,c2,p1,p2):
     p2mid = p1aux
     for i in p1init:
         if i in p1mid:
-            index = p1mid.index(i)
-            p1init[i] = p1aux[index]
+            j = p1mid.index(i)
+            p1init[p1init.index(i)] = p1aux[j]
     for i in p1end:
         if i in p1mid:
-            index = p1mid.index(i)
-            p1end[i] = p1aux[index]
+            j = p1mid.index(i)
+            p1end[p1end.index(i)] = p1aux[j]
     for i in p2init:
         if i in p2mid:
-            index = p2mid.index(i)
-            p2init[i] = p2aux[index]
+            j = p2mid.index(i)
+            p2init[p2init.index(i)] = p2aux[j]
     for i in p2end:
         if i in p2mid:
-            index = p2mid.index(i)
-            p2end[i] = p2aux[index]
+            j = p2mid.index(i)
+            p2end[p2end.index(i)] = p2aux[j]
     p1 = p1init + p1mid + p1end
     p2 = p2init + p2mid + p2end
     return p1,p2
@@ -301,18 +302,18 @@ def bit_split_double(c1,c2,p):
     final = []
     for i in range(chromoPopulation):
         if c1 < c2:
-            if (i < c1) and (i < c2):
+            if (i < c1):
                 initial.append(p[i])
             elif (i >= c1) and (i < c2):
                 mid.append(p[i])
-            else:
+            elif (i >= c2):
                 final.append(p[i])
         else:
-            if (i < c2) and (i < c1):
+            if (i < c2):
                 initial.append(p[i])
             elif (i >= c2) and (i < c1):
                 mid.append(p[i])
-            else:
+            elif (i >= c1):
                 final.append(p[i])
     return initial,mid,final
 
