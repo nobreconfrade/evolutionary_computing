@@ -237,7 +237,6 @@ def crossover(newPopulation):
                 lfinal.append(newPopulation[i+1])
             else:
                  cut1,cut2 = sample(range(1,chromoPopulation),2)
-                 print('cuts',cut1,cut2)
                  p1,p2 = pmx(cut1,cut2,newPopulation[i],newPopulation[i+1])
                  lfinal.append(p1)
                  lfinal.append(p2)
