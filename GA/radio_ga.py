@@ -53,10 +53,6 @@ def diversity_calc():
                  diversityValue += (population[j][i] - centroid[i])**2
         return diversityValue
 
-def diversity_standarlization():
-# put the standarlization function for diversity here
-    return
-
 def fitness_calc():
     if typePopulation == 1:
         for i in range(nPopulation):

@@ -185,14 +185,14 @@ def crossover_probability(p):
 def crossover(newPopulation):
     lfinal = []
     prob = 0.8
-    if typePopulation == 1:
+    if typePopulation == 1 and typePopulation == 5:
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
                 lfinal.append(newPopulation[i])
                 lfinal.append(newPopulation[i+1])
             else:
-                cut = randint(1,chromoPopulation)
+                cut = randint(1,len(newPopulation[i]))
                 p1,p2 = single_cut(cut,newPopulation[i],newPopulation[i+1])
                 lfinal.append(p1)
                 lfinal.append(p2)
@@ -225,9 +225,16 @@ def crossover(newPopulation):
                 lfinal.append(p1)
                 lfinal.append(p2)
     if typePopulation == 4:
-        pass
-    if typePopulation == 5:
-        pass
+        '''PMX'''
+        for i in range(0,len(newPopulation),2):
+            if (crossover_probability(prob) == False):
+                lfinal.append(newPopulation[i])
+                lfinal.append(newPopulation[i+1])
+            else:
+                 cut1,cut2 = sample(range(0,chromoPopulation),2)
+                 p1,p2 = pmx(cut1,cut2,newPopulation[i],newPopulation[i+1])
+                 lfinal.append(p1)
+                 lfinal.append(p2)
     return lfinal
 
 def single_cut(cut,p1,p2):
@@ -240,8 +247,8 @@ def single_cut(cut,p1,p2):
 def bit_split_single(c,p):
     initial = []
     final = []
-    for i in range(chromoPopulation):
-        if i <= c:
+    for i in range(len(p)):
+        if (i < c):
             initial.append(p[i])
         else:
             final.append(p[i])
@@ -250,11 +257,59 @@ def bit_split_single(c,p):
 def average_uniform_calc(m,p1,p2):
     for i in range(chromoPopulation):
         mean = (p1[i] + p2[i]) / 2
-        if m[i] == 0:
+        if (m[i] == 0):
             p1[i] = mean
-        if m[i] == 1:
+        if (m[i] == 1):
             p2[i] = mean
     return p1,p2
+
+def pmx(c1,c2,p1,p2):
+    p1init,p1mid,p1end = bit_split_double(c1,c2,p1)
+    p2init,p2mid,p2end = bit_split_double(c1,c2,p2)
+    p1aux = p1mid
+    p2aux = p2mid
+    p1mid = p2aux
+    p2mid = p1aux
+    for i in p1init:
+        if i in p1mid:
+            index = p1mid.index(i)
+            p1init[i] = p1aux[index]
+    for i in p1end:
+        if i in p1mid:
+            index = p1mid.index(i)
+            p1end[i] = p1aux[index]
+    for i in p2init:
+        if i in p2mid:
+            index = p2mid.index(i)
+            p2init[i] = p2aux[index]
+    for i in p2end:
+        if i in p2mid:
+            index = p2mid.index(i)
+            p2end[i] = p2aux[index]
+    p1 = p1init + p1mid + p1end
+    p2 = p2init + p2mid + p2end
+    return p1,p2
+
+def bit_split_double(c1,c2,p):
+    initial = []
+    mid = []
+    final = []
+    for i in range(chromoPopulation):
+        if c1 < c2:
+            if (i < c1) and (i < c2):
+                initial.append(p[i])
+            elif (i >= c1) anc (i < c2):
+                mid.append(p[i])
+            else:
+                final.append(p[i])
+        else:
+        if (i < c2) and (i < c1):
+            initial.append(p[i])
+        elif (i >= c2) anc (i < c1):
+            mid.append(p[i])
+        else:
+            final.append(p[i])
+    return initial,mid,final
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
