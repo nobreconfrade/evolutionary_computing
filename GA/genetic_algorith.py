@@ -121,7 +121,7 @@ def selection(newPopulation):
     # '''TOURNAMENT'''
     # newPopulation = tournament(newPopulation)
     # print(newPopulation)
-    return
+    return newPopulation
 
 def roulette(newPopulation):
     for pop in range(nPopulation):
@@ -185,7 +185,7 @@ def crossover_probability(p):
 def crossover(newPopulation):
     lfinal = []
     prob = 0.8
-    if typePopulation == 1 and typePopulation == 5:
+    if typePopulation == 1 or typePopulation == 5:
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
@@ -219,11 +219,16 @@ def crossover(newPopulation):
                 lfinal.append(newPopulation[i+1])
             else:
                 mask = []
-                for i in chromoPopulation:
+                for j in range(chromoPopulation):
                     mask.append(randint(0,1))
                 p1,p2 = average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
+                print("ADICIONADO, numero",i,"valor",p1,p2)
                 lfinal.append(p1)
                 lfinal.append(p2)
+
+                print("\n")
+                print("LFINAL",lfinal[0])
+                print("\n")
     if typePopulation == 4:
         '''PMX'''
         for i in range(0,len(newPopulation),2):
@@ -298,17 +303,17 @@ def bit_split_double(c1,c2,p):
         if c1 < c2:
             if (i < c1) and (i < c2):
                 initial.append(p[i])
-            elif (i >= c1) anc (i < c2):
+            elif (i >= c1) and (i < c2):
                 mid.append(p[i])
             else:
                 final.append(p[i])
         else:
-        if (i < c2) and (i < c1):
-            initial.append(p[i])
-        elif (i >= c2) anc (i < c1):
-            mid.append(p[i])
-        else:
-            final.append(p[i])
+            if (i < c2) and (i < c1):
+                initial.append(p[i])
+            elif (i >= c2) and (i < c1):
+                mid.append(p[i])
+            else:
+                final.append(p[i])
     return initial,mid,final
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
@@ -348,7 +353,10 @@ diversity.append(diversity_calc())
 diversity_standarlization()
 # print(diversity)
 fitness_calc()
-print(fitness)
-selection(newPopulation)
+# print(fitness)
+newPopulation = selection(newPopulation)
+print(newPopulation)
+print("\n")
 population = crossover(newPopulation)
+print(population)
 # END MAIN LOOP
