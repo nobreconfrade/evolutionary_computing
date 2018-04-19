@@ -316,6 +316,42 @@ def bit_split_double(c1,c2,p):
                 final.append(p[i])
     return initial,mid,final
 
+def mutation_probability(p):
+    n = uniform(0,1)
+    if (n > p):
+        return False
+    else:
+        return True
+
+
+def mutation(population):
+    lfinal = []
+    p = 0.03
+    if typePopulation == 1 or typePopulation == 5:
+        '''BIT FLIP'''
+        for i in range(len(population))
+            for j in range(len(population[i]))
+                if (mutation_probability(p) == True):
+                    if (population[i][j] == 0):
+                        population[i][j] = 1
+                    else:
+                        population[i][j] = 0
+                else:
+                    pass
+    if typePopulation == 2:
+        '''RANDOM VALUE'''
+        for i in range(len(population))
+            for j in range(len(population[i]))
+                if (mutation_probability(p) == True):
+                    population[i][j] = randint(ilPopulation,slPopulation)
+                else:
+                    pass
+    if typePopulation == 3:
+        pass
+    if typePopulation == 4:
+        pass
+    return
+
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
 if typePopulation != 1 and typePopulation != 4:
@@ -359,4 +395,5 @@ print(newPopulation)
 print("\n")
 population = crossover(newPopulation)
 print(population)
+population = mutation(population)
 # END MAIN LOOP
