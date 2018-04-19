@@ -221,7 +221,9 @@ def crossover(newPopulation):
                 mask = []
                 for i in chromoPopulation:
                     mask.append(randint(0,1))
-                average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
+                p1,p2 = average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
+                lfinal.append(p1)
+                lfinal.append(p2)
     if typePopulation == 4:
         pass
     if typePopulation == 5:
@@ -246,7 +248,13 @@ def bit_split_single(c,p):
     return initial,final
 
 def average_uniform_calc(m,p1,p2):
-    return
+    for i in range(chromoPopulation):
+        mean = (p1[i] + p2[i]) / 2
+        if m[i] == 0:
+            p1[i] = mean
+        if m[i] == 1:
+            p2[i] = mean
+    return p1,p2
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
