@@ -172,7 +172,7 @@ def tournament(newPopulation):
             if maxFitness < fitness[i]:
                 maxFitness = fitness[i]
                 indFitness = i
-        newPopulation.append(population[indFitness])
+        newPopulation.append(population[indFitness].copy())
     return newPopulation
 
 def crossover_probability(p):
@@ -342,9 +342,29 @@ def mutation(population):
                 else:
                     pass
     if typePopulation == 3:
-        pass
+        '''GAUSSIAN'''
+        stdev = 0.1
+        for i in range(len(population)):
+            for j in range(len(population[i])):
+                if (mutation_probability(p) == True):
+                    population[i][j] = float(numpy.random.normal(population[i][j],stdev,1))
+                else:
+                    pass
     if typePopulation == 4:
-        pass
+        '''SWAP'''
+        for i in range(len(population)):
+            for j in range(len(population[i])):
+                if (mutation_probability(p) == True):
+                    flag = True
+                    swap = population[i][j]
+                    while flag:
+                        m = randint(0,len(population[i]))
+                        if m != j:
+                            flag = False
+                    population[i][j] = population[i][m]
+                    population[i][m] = swap 
+                else:
+                    pass
     return
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
