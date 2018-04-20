@@ -116,10 +116,10 @@ def bin_to_real(individual,lowerBit,upperBit):
 
 def selection(newPopulation):
     newPopulation = []
-    # '''ROULETTE'''
-    # newPopulation = roulette(newPopulation)
-    '''TOURNAMENT'''
-    newPopulation = tournament(newPopulation)
+    '''ROULETTE'''
+    newPopulation = roulette(newPopulation)
+    # '''TOURNAMENT'''
+    # newPopulation = tournament(newPopulation)
     # print(newPopulation)
     return newPopulation
 
@@ -148,7 +148,7 @@ def roulette(newPopulation):
         for i,val in enumerate(l):
             if tip <= val:
                 skip = i
-                newPopulation.append(population[i])
+                newPopulation.append(population[i].copy())
                 break
     return newPopulation
 
@@ -222,13 +222,8 @@ def crossover(newPopulation):
                 for j in range(chromoPopulation):
                     mask.append(randint(0,1))
                 p1,p2 = average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
-                print("ADICIONADO, numero",i,"valor",p1,p2)
                 lfinal.append(p1)
                 lfinal.append(p2)
-
-                print("\n")
-                print("LFINAL",lfinal[0])
-                print("\n")
     if typePopulation == 4:
         '''PMX'''
         for i in range(0,len(newPopulation),2):
@@ -329,8 +324,8 @@ def mutation(population):
     p = 0.03
     if typePopulation == 1 or typePopulation == 5:
         '''BIT FLIP'''
-        for i in range(len(population))
-            for j in range(len(population[i]))
+        for i in range(len(population)):
+            for j in range(len(population[i])):
                 if (mutation_probability(p) == True):
                     if (population[i][j] == 0):
                         population[i][j] = 1
@@ -340,8 +335,8 @@ def mutation(population):
                     pass
     if typePopulation == 2:
         '''RANDOM VALUE'''
-        for i in range(len(population))
-            for j in range(len(population[i]))
+        for i in range(len(population)):
+            for j in range(len(population[i])):
                 if (mutation_probability(p) == True):
                     population[i][j] = randint(ilPopulation,slPopulation)
                 else:
