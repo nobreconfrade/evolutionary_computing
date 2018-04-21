@@ -318,7 +318,6 @@ def mutation_probability(p):
     else:
         return True
 
-
 def mutation(population):
     lfinal = []
     p = 0.03
@@ -358,14 +357,14 @@ def mutation(population):
                     flag = True
                     swap = population[i][j]
                     while flag:
-                        m = randint(0,len(population[i]))
+                        m = randint(0,len(population[i])-1)
                         if m != j:
                             flag = False
                     population[i][j] = population[i][m]
-                    population[i][m] = swap 
+                    population[i][m] = swap
                 else:
                     pass
-    return
+    return population
 
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
@@ -394,6 +393,7 @@ diversity = []
 fitness = []
 newPopulation = []
 binPopulation = 0
+bestPopulation = []
 # END VARIABLES
 
 #  MAIN LOOP
@@ -405,10 +405,9 @@ diversity_standarlization()
 # print(diversity)
 fitness_calc()
 # print(fitness)
+bestPopulation = elitism_best(fitness,population)
 newPopulation = selection(newPopulation)
-print(newPopulation)
-print("\n")
 population = crossover(newPopulation)
-print(population)
 population = mutation(population)
+# print(population)
 # END MAIN LOOP
