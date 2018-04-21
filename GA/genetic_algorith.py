@@ -366,6 +366,17 @@ def mutation(population):
                     pass
     return population
 
+def elitism_find(f,p):
+    aux = max(f)
+    i = f.index(aux)
+    best = p[i].copy()
+    return best
+
+def elitism_act(p,best):
+    p.pop(0)
+    p.insert(0,best)
+    return p
+
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
 if typePopulation != 1 and typePopulation != 4:
@@ -393,7 +404,6 @@ diversity = []
 fitness = []
 newPopulation = []
 binPopulation = 0
-bestPopulation = []
 # END VARIABLES
 
 #  MAIN LOOP
@@ -405,9 +415,10 @@ diversity_standarlization()
 # print(diversity)
 fitness_calc()
 # print(fitness)
-bestPopulation = elitism_best(fitness,population)
+bestPopulation = elitism_find(fitness,population)
 newPopulation = selection(newPopulation)
 population = crossover(newPopulation)
 population = mutation(population)
+population = elitism_act(population,bestPopulation)
 # print(population)
 # END MAIN LOOP
