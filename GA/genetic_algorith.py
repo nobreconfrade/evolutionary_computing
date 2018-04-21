@@ -58,20 +58,21 @@ def diversity_standarlization():
     return
 
 def fitness_calc():
+    l = []
     if typePopulation == 1:
         for i in range(nPopulation):
             aux = 0
             for j in range(chromoPopulation-1):
                 if population[i][j] != population[i][j+1]:
                     aux += 1
-            fitness.append(aux)
+            l.append(aux)
     if typePopulation == 2 or typePopulation == 4:
         for i in range(nPopulation):
             aux = 0
             for j in range(chromoPopulation-1):
                 if (int(population[i][j]%2)==0 and int(population[i][j+1]%2)==1) or (int(population[i][j]%2)==1 and int(population[i][j+1]%2)==0):
                     aux += 1
-            fitness.append(aux)
+            l.append(aux)
     if typePopulation == 3:
         for i in range(nPopulation):
             firstSum = 0
@@ -79,21 +80,28 @@ def fitness_calc():
             for c in population[i]:
                 firstSum += c**2.0
                 secondSum += cos(2.0*pi*c)
-            fitness.append(-20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e)
+            aux = -20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e
+            aux = fitness_standard_ackley(aux)
+            l.append(aux)
     if typePopulation == 5:
         # fitness da funcao algebrica para maximizar o valor
         binPopulation = bin_population_calc()
         for i in range(nPopulation):
             x = bin_to_real(population[i],0,binPopulation)
             aux = cos(20*x) - (abs(x)/2) + ((x**3)/4)
-            aux = fitness_standard_alg(aux)
+            aux = fitness_standard_algebra(aux)
             aux = fitness_penalization(aux)
-            fitness.append(aux)
-    return
+            l.append(aux)
+    return l
 
-def fitness_standard_alg(x):
+def fitness_standard_algebra(x):
     # standarlization for algebra function problem
     x = (4 + x)/(2 + 4)
+    return x
+
+def fitness_standard_ackley(x):
+    # standarlization for algebra function problem
+    x = 23 - x
     return x
 
 def fitness_penalization(x):
@@ -114,16 +122,18 @@ def bin_to_real(individual,lowerBit,upperBit):
     x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc()) - 1)) * d
     return x
 
-def selection(newPopulation):
+def selection(fitness,g,tour):
     newPopulation = []
     '''ROULETTE'''
-    newPopulation = roulette(newPopulation)
+    newPopulation = roulette(newPopulation,fitness)
     # '''TOURNAMENT'''
-    # newPopulation = tournament(newPopulation)
+    # if(g == 0):
+    #     tour = int(input("Escolha o tamanho do torneio:\n"))
+    # newPopulation = tournament(newPopulation,fitness,tour)
     # print(newPopulation)
     return newPopulation
 
-def roulette(newPopulation):
+def roulette(newPopulation,fitness):
     for pop in range(nPopulation):
         fitnessSum = 0
         fitnessProb = []
@@ -152,8 +162,7 @@ def roulette(newPopulation):
                 break
     return newPopulation
 
-def tournament(newPopulation):
-    k = int(input("Escolha o tamanho do torneio:\n"))
+def tournament(newPopulation,fitness,k):
     indFitness = -1
     for pop in range(nPopulation):
         maxFitness = 0
@@ -386,6 +395,7 @@ nPopulation = input("Escolha a quantidade de individuos:\n")
 chromoPopulation = input("Escolha o tamanho do cromossomo:\n")
 if typePopulation == 5:
     precisionPopulation = input("Escolha a precisão da codificação:\n")
+generationsPopulation = input("Escolha a quantidade gerações:\n")
 
 # CAST
 if typePopulation != 1 and typePopulation != 4:
@@ -395,30 +405,34 @@ nPopulation = int(nPopulation)
 chromoPopulation = int(chromoPopulation)
 if typePopulation == 5:
     precisionPopulation = int(precisionPopulation)
+generationsPopulation = int(generationsPopulation)
 # END CAST
 
 # VARIABLES
 population = []
 # population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
 diversity = []
-fitness = []
-newPopulation = []
+fitnessList = []
 binPopulation = 0
+tour = 0
 # END VARIABLES
 
 #  MAIN LOOP
 populate()
 print(population)
 print("---------------------------------\n")
-diversity.append(diversity_calc())
-diversity_standarlization()
-# print(diversity)
-fitness_calc()
-# print(fitness)
-bestPopulation = elitism_find(fitness,population)
-newPopulation = selection(newPopulation)
-population = crossover(newPopulation)
-population = mutation(population)
-population = elitism_act(population,bestPopulation)
-# print(population)
+for gen in range(generationsPopulation):
+    diversity.append(diversity_calc())
+    diversity_standarlization()
+    # print(diversity)
+    fitness = fitness_calc()
+    # print(fitness)
+    bestPopulation = elitism_find(fitness,population)
+    newPopulation = selection(fitness,gen,tour)
+    population = crossover(newPopulation)
+    population = mutation(population)
+    population = elitism_act(population,bestPopulation)
+    fitnessList.append(fitness)
+print("ULTIMA GERAÇÃO: ",population)
+print("MELHOR FITNESS: ",max(fitnessList[generationsPopulation-1]))
 # END MAIN LOOP
