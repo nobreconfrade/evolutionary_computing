@@ -22,8 +22,14 @@ def populate():
         if typePopulation == 4:
             population.append(sample(range(0,chromoPopulation),chromoPopulation))
         if typePopulation == 5:
-            binPopulation = bin_population_calc()
+            binPopulation = bin_population_calc(ilPopulation,slPopulation,precisionPopulation)
             for j in range(binPopulation):
+                individual.append(randint(0,1))
+            population.append(individual)
+        if typePopulation == 6:
+            bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
+            bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
+            for j in range(bin1Population+bin2Population):
                 individual.append(randint(0,1))
             population.append(individual)
     return
@@ -40,23 +46,27 @@ def diversity_calc():
                 diversityValue += soma
         return diversityValue
 
-    if typePopulation == 1 or typePopulation == 3 or typePopulation == 5:
+    if typePopulation == 1 or typePopulation == 3 or typePopulation == 5 or typePopulation == 6:
         # METHOD: Moment of Inertia http://www.joinville.udesc.br/portal/professores/parpinelli/materiais/MomentOf_Inertia_Diversity___EA_01.pdf
         centroid = []
-        for i in range (chromoPopulation):
+        # gambiarra forte para pegar a quantidade de genes do primeiro individuo
+        for i in range(len(population[0])):
             aux = 0
             for j in range(nPopulation):
                 aux += population[j][i]
             aux = aux/nPopulation
             centroid.append(aux)
-        for i in range (chromoPopulation):
+        for i in range(len(population[0])):
             for j in range(nPopulation):
                  diversityValue += (population[j][i] - centroid[i])**2
         return diversityValue
 
-def diversity_standarlization():
-# put the standarlization function for diversity here
-    return
+def diversity_standarlization(dl):
+    big = max(dl)
+    l = []
+    for i in dl:
+        l.append((i-0)/(big-0))
+    return l
 
 def fitness_calc():
     l = []
@@ -86,14 +96,44 @@ def fitness_calc():
             l.append(aux)
     if typePopulation == 5:
         # fitness da funcao algebrica para maximizar o valor
-        binPopulation = bin_population_calc()
+        binPopulation = bin_population_calc(ilPopulation,slPopulation,precisionPopulation)
         for i in range(nPopulation):
             x = bin_to_real(population[i],0,binPopulation)
             aux = cos(20*x) - (abs(x)/2) + ((x**3)/4)
             aux = fitness_standard_algebra(aux)
             aux = fitness_penalization(aux)
             l.append(aux)
+    if typePopulation == 6:
+        # fitness da funcao do problema da radio
+        for i in range(nPopulation):
+            st = bin_to_real_radio(population[i],0,bin1Population,0)
+            lx = bin_to_real_radio(population[i],bin1Population+1,bin2Population+bin1Population,1)
+            funcObj = (30*st+40*lx)/1360
+            penalty = 0
+            if st+2*lx > 40:
+                penalty = (st+2*lx)/16
+            r = -1
+            aux = funcObj + r*penalty
+            l.append(aux)
     return l
+
+def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
+    i = 0
+    domainRange = ((slPopulation - ilPopulation) + 1)/ 10**-precisionPopulation
+    while domainRange > 2**i:
+        i+=1
+    return i
+
+def bin_to_real_radio(individual,lowerBit,upperBit,t):
+    auxList = []
+    for i in range(lowerBit,upperBit):
+        auxList.append(individual[i])
+    d = int(''.join(map(str,auxList)),2)
+    if t == 0:
+        x = il1Population + ((sl1Population - il1Population)/float((2**bin1Population) - 1)) * d
+    if t == 1:
+        x = il2Population + ((sl2Population - il2Population)/float((2**bin2Population) - 1)) * d
+    return x
 
 def fitness_standard_algebra(x):
     # standarlization for algebra function problem
@@ -105,33 +145,35 @@ def fitness_standard_ackley(x):
     x = 23 - x
     return x
 
+def fitness_standarlization(af,bf):
+    big = max(bf)
+    la = []
+    lb = []
+    for i in af:
+        la.append((i)/(big))
+    for i in bf:
+        lb.append((i)/(big))
+    return la,lb
+
 def fitness_penalization(x):
     return x
-
-def bin_population_calc():
-    i = 0
-    domainRange = ((slPopulation - ilPopulation) + 1)/ 10**-precisionPopulation
-    while domainRange > 2**i:
-        i+=1
-    return i
 
 def bin_to_real(individual,lowerBit,upperBit):
     auxList = []
     for i in range(lowerBit,upperBit):
         auxList.append(individual[i])
     d = int(''.join(map(str,auxList)),2)
-    x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc()) - 1)) * d
+    x = ilPopulation + ((slPopulation - ilPopulation)/float((2**bin_population_calc(ilPopulation,slPopulation,precisionPopulation)) - 1)) * d
     return x
 
 def selection(fitness,g,tour):
     newPopulation = []
-    '''ROULETTE'''
-    newPopulation = roulette(newPopulation,fitness)
-    # '''TOURNAMENT'''
-    # if(g == 0):
-    #     tour = int(input("Escolha o tamanho do torneio:\n"))
-    # newPopulation = tournament(newPopulation,fitness,tour)
-    # print(newPopulation)
+    # '''ROULETTE'''
+    # newPopulation = roulette(newPopulation,fitness)
+    '''TOURNAMENT'''
+    if(g == 0):
+        tour = int(input("Escolha o tamanho do torneio:\n"))
+    newPopulation = tournament(newPopulation,fitness,tour)
     return newPopulation
 
 def roulette(newPopulation,fitness):
@@ -195,7 +237,7 @@ def crossover_probability(p):
 def crossover(newPopulation):
     lfinal = []
     prob = 0.8
-    if typePopulation == 1 or typePopulation == 5:
+    if typePopulation == 1 or typePopulation == 5 or typePopulation == 6:
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
@@ -331,7 +373,7 @@ def mutation_probability(p):
 def mutation(population):
     lfinal = []
     p = 0.03
-    if typePopulation == 1 or typePopulation == 5:
+    if typePopulation == 1 or typePopulation == 5 or typePopulation == 6:
         '''BIT FLIP'''
         for i in range(len(population)):
             for j in range(len(population[i])):
@@ -407,7 +449,7 @@ def plotDiversity(problem,diversity):
 def plotConvergence(problem,fitnessListAverage,fitnessListBest):
     plt.title('Algoritmo Genético - Problema: '+problem)
     plt.xlim([1,len(fitnessListBest)])
-    plt.ylim([0,max(fitnessListBest)+1])
+    plt.ylim([0,1.1])
     plt.xlabel('Numero de gerações')
     plt.ylabel('Fitness')
 
@@ -437,24 +479,34 @@ def find_fitness(fl,np):
         averageList.append(mean)
     return averageList,bestList
 
-typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
+typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM, 5-CODBIN e 6-RADIO:\n")
 typePopulation = int(typePopulation)
-if typePopulation != 1 and typePopulation != 4:
+if typePopulation == 6:
+    il1Population = input("Escolha uma limite inferior primeira variavel:\n")
+    sl1Population = input("Escolha uma limite superior primeira variavel:\n")
+    il2Population = input("Escolha uma limite inferior segunda variavel:\n")
+    sl2Population = input("Escolha uma limite superior segunda variavel:\n")
+if typePopulation != 1 and typePopulation != 4 and typePopulation != 6:
     ilPopulation = input("Escolha uma limite inferior:\n")
     slPopulation = input("Escolha uma limite superior:\n")
 nPopulation = input("Escolha a quantidade de individuos:\n")
 chromoPopulation = input("Escolha o tamanho do cromossomo:\n")
-if typePopulation == 5:
+if typePopulation == 5 or typePopulation == 6:
     precisionPopulation = input("Escolha a precisão da codificação:\n")
 generationsPopulation = input("Escolha a quantidade gerações:\n")
 
 # CAST
-if typePopulation != 1 and typePopulation != 4:
+if typePopulation == 6:
+    il1Population = int(il1Population)
+    sl1Population = int(sl1Population)
+    il2Population = int(il2Population)
+    sl2Population = int(sl2Population)
+if typePopulation != 1 and typePopulation != 4 and typePopulation != 6:
     ilPopulation = int(ilPopulation)
     slPopulation = int(slPopulation)
 nPopulation = int(nPopulation)
 chromoPopulation = int(chromoPopulation)
-if typePopulation == 5:
+if typePopulation == 5 or typePopulation == 6:
     precisionPopulation = int(precisionPopulation)
 generationsPopulation = int(generationsPopulation)
 # END CAST
@@ -462,7 +514,7 @@ generationsPopulation = int(generationsPopulation)
 # VARIABLES
 population = []
 # population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
-diversity = []
+diversityList = []
 fitnessList = []
 binPopulation = 0
 tour = 0
@@ -476,6 +528,10 @@ if typePopulation == 4:
     problem = 'caixeiro'
 if typePopulation == 5:
     problem = 'funcaoalgebrica'
+if typePopulation == 6:
+    problem = 'radio'
+    bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
+    bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
 # END VARIABLES
 
 #  MAIN LOOP
@@ -483,9 +539,7 @@ populate()
 # print(population)
 # print("---------------------------------\n")
 for gen in range(generationsPopulation):
-    diversity.append(diversity_calc())
-    diversity_standarlization()
-    # print(diversity)
+    diversityList.append(diversity_calc())
     fitness = fitness_calc()
     # print(fitness)
     bestPopulation = elitism_find(fitness,population)
@@ -495,8 +549,8 @@ for gen in range(generationsPopulation):
     population = elitism_act(population,bestPopulation)
     fitnessList.append(fitness)
 averageFitness,bestFitness = find_fitness(fitnessList,nPopulation)
-# print("MÉDIA FITNESS: ",averageFitness)
-# print("MELHORES FITNESS de todas as gen: ",bestFitness)
-# plotDiversity(problem,)
+diversityList = diversity_standarlization(diversityList)
+averageFitness,bestFitness = fitness_standarlization(averageFitness,bestFitness)
+plotDiversity(problem,diversityList)
 plotConvergence(problem,averageFitness,bestFitness)
 # END MAIN LOOP
