@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from random import *
 from math import *
 from sys import *
@@ -386,6 +387,56 @@ def elitism_act(p,best):
     p.insert(0,best)
     return p
 
+def plotDiversity(problem,diversity):
+    plt.title('Algoritmo Genético - Diversidade - Problema: '+problem)
+    plt.xlim([1,len(diversity)])
+    plt.ylim([0,1.1])
+    plt.xlabel('Numero de gerações')
+    plt.ylabel('Diversidade')
+
+    plt.gca().set_color_cycle(['green'])
+
+    plt.plot(range(1,len(diversity)+1), diversity)
+
+    plt.legend(['Diversidade'], loc='upper right')
+
+    plt.savefig("graphs/diversity/"+problem+".png")
+    plt.close()
+    return
+
+def plotConvergence(problem,fitnessListAverage,fitnessListBest):
+    plt.title('Algoritmo Genético - Problema: '+problem)
+    plt.xlim([1,len(fitnessListBest)])
+    plt.ylim([0,max(fitnessListBest)+1])
+    plt.xlabel('Numero de gerações')
+    plt.ylabel('Fitness')
+
+    plt.gca().set_color_cycle(['red', 'blue'])
+
+    plt.plot(range(1, len(fitnessListAverage)+1), fitnessListAverage)
+    plt.plot(range(1, len(fitnessListBest)+1), fitnessListBest)
+
+    plt.legend(['Média dos fitness', 'Melhor fitness'], loc='upper right')
+
+    plt.savefig("graphs/fitness/"+problem+".png")
+    plt.close()
+    return
+
+def find_fitness(fl,np):
+    bestList = []
+    averageList = []
+    for i in fl:
+        mean = 0
+        best = 0
+        for j in i:
+            mean += j
+            if j > best:
+                best = j
+        mean = mean / np
+        bestList.append(best)
+        averageList.append(mean)
+    return averageList,bestList
+
 typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM e 5-CODBIN:\n")
 typePopulation = int(typePopulation)
 if typePopulation != 1 and typePopulation != 4:
@@ -415,12 +466,22 @@ diversity = []
 fitnessList = []
 binPopulation = 0
 tour = 0
+if typePopulation == 1:
+    problem = 'bitsalternados'
+if typePopulation == 2:
+    problem = 'parimpar'
+if typePopulation == 3:
+    problem = 'ackley'
+if typePopulation == 4:
+    problem = 'caixeiro'
+if typePopulation == 5:
+    problem = 'funcaoalgebrica'
 # END VARIABLES
 
 #  MAIN LOOP
 populate()
-print(population)
-print("---------------------------------\n")
+# print(population)
+# print("---------------------------------\n")
 for gen in range(generationsPopulation):
     diversity.append(diversity_calc())
     diversity_standarlization()
@@ -433,6 +494,9 @@ for gen in range(generationsPopulation):
     population = mutation(population)
     population = elitism_act(population,bestPopulation)
     fitnessList.append(fitness)
-print("ULTIMA GERAÇÃO: ",population)
-print("MELHOR FITNESS: ",max(fitnessList[generationsPopulation-1]))
+averageFitness,bestFitness = find_fitness(fitnessList,nPopulation)
+# print("MÉDIA FITNESS: ",averageFitness)
+# print("MELHORES FITNESS de todas as gen: ",bestFitness)
+# plotDiversity(problem,)
+plotConvergence(problem,averageFitness,bestFitness)
 # END MAIN LOOP
