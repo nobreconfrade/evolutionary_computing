@@ -458,7 +458,7 @@ def plotDiversity(problem,diversity):
     plt.title('Algoritmo Genético - Diversidade - Problema: '+problem)
     plt.xlim([1,len(diversity)])
     plt.ylim([0,1.1])
-    plt.xlabel('Numero de gerações')
+    plt.xlabel('Número de gerações')
     plt.ylabel('Diversidade')
 
     plt.gca().set_color_cycle(['green'])
@@ -475,7 +475,7 @@ def plotConvergence(problem,fitnessListAverage,fitnessListBest):
     plt.title('Algoritmo Genético - Problema: '+problem)
     plt.xlim([1,len(fitnessListBest)])
     plt.ylim([0,1.1])
-    plt.xlabel('Numero de gerações')
+    plt.xlabel('Número de gerações')
     plt.ylabel('Fitness')
 
     plt.gca().set_color_cycle(['red', 'blue'])
