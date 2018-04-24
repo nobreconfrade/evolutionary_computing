@@ -77,7 +77,7 @@ def fitness_calc():
                 if population[i][j] != population[i][j+1]:
                     aux += 1
             l.append(aux)
-    if typePopulation == 2 or typePopulation == 4:
+    if typePopulation == 2:
         for i in range(nPopulation):
             aux = 0
             for j in range(chromoPopulation-1):
@@ -93,6 +93,23 @@ def fitness_calc():
                 secondSum += cos(2.0*pi*c)
             aux = -20.0*exp(-0.2*sqrt(firstSum/chromoPopulation)) - exp(secondSum/chromoPopulation) + 20 + e
             aux = fitness_standard_ackley(aux)
+            l.append(aux)
+    if typePopulation == 4:
+        aux = 0
+        for i in range(nPopulation):
+            for j in range(len(population[i])):
+                if j == len(population[i]) - 1:
+                    c1 = population[i][j]
+                    c2 = population[i][0]
+                    l1 = traveling[c1]
+                    l2 = traveling[c2]
+                    aux += sqrt(pow(l1[0] - l2[0],2) + pow(l1[1] - l2[1],2))
+                else:
+                    c1 = population[i][j]
+                    c2 = population[i][j+1]
+                    l1 = traveling[c1]
+                    l2 = traveling[c2]
+                    aux += sqrt(pow(l1[0] - l2[0],2) + pow(l1[1] - l2[1],2))
             l.append(aux)
     if typePopulation == 5:
         # fitness da funcao algebrica para maximizar o valor
@@ -168,12 +185,12 @@ def bin_to_real(individual,lowerBit,upperBit):
 
 def selection(fitness,g,tour):
     newPopulation = []
-    # '''ROULETTE'''
-    # newPopulation = roulette(newPopulation,fitness)
-    '''TOURNAMENT'''
-    if(g == 0):
-        tour = int(input("Escolha o tamanho do torneio:\n"))
-    newPopulation = tournament(newPopulation,fitness,tour)
+    '''ROULETTE'''
+    newPopulation = roulette(newPopulation,fitness)
+    # '''TOURNAMENT'''
+    # if(g == 0):
+    #     tour = int(input("Escolha o tamanho do torneio:\n"))
+    # newPopulation = tournament(newPopulation,fitness,tour)
     return newPopulation
 
 def roulette(newPopulation,fitness):
@@ -193,11 +210,11 @@ def roulette(newPopulation,fitness):
                 if i == skip:
                     fitnessProb.append(0)
                 else:
-                    fitnessProb.append(i/fitnessSum)
+                    fitnessProb.append(val/fitnessSum)
             else:
-                fitnessProb.append(i/fitnessSum)
+                fitnessProb.append(val/fitnessSum)
         l = numpy.cumsum(fitnessProb)
-        tip = uniform(0,l[len(l)-1])
+        tip = uniform(0,1)
         for i,val in enumerate(l):
             if tip <= val:
                 skip = i
@@ -425,8 +442,12 @@ def elitism_find(f,p):
     return best
 
 def elitism_act(p,best):
+    # print("##########################################################")
+    # print(p)
     p.pop(0)
     p.insert(0,best)
+    # print(p)
+    # print("##########################################################")
     return p
 
 def plotDiversity(problem,diversity):
@@ -458,7 +479,7 @@ def plotConvergence(problem,fitnessListAverage,fitnessListBest):
     plt.plot(range(1, len(fitnessListAverage)+1), fitnessListAverage)
     plt.plot(range(1, len(fitnessListBest)+1), fitnessListBest)
 
-    plt.legend(['Média dos fitness', 'Melhor fitness'], loc='upper right')
+    plt.legend(['Média dos fitness', 'Melhor fitness'], loc='upper left')
 
     plt.savefig("graphs/fitness/"+problem+".png")
     plt.close()
@@ -513,7 +534,8 @@ generationsPopulation = int(generationsPopulation)
 
 # VARIABLES
 population = []
-# population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],]
+# population = [[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5],[5,5,5,5,5]]
+traveling = [[0,0.2],[0.15, 0.80],[0.20, 0.65],[0.90, 0.30],[0.75, 0.45],[0.30, 0.75],[0.05, 0.05],[0.95, 0.95],[0.55, 0.55],[0.85, 0.25]]
 diversityList = []
 fitnessList = []
 binPopulation = 0
