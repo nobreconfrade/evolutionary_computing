@@ -95,8 +95,8 @@ def fitness_calc():
             aux = fitness_standard_ackley(aux)
             l.append(aux)
     if typePopulation == 4:
-        aux = 0
         for i in range(nPopulation):
+            aux = 0
             for j in range(len(population[i])):
                 if j == len(population[i]) - 1:
                     c1 = population[i][j]
@@ -110,7 +110,10 @@ def fitness_calc():
                     l1 = traveling[c1]
                     l2 = traveling[c2]
                     aux += sqrt(pow(l1[0] - l2[0],2) + pow(l1[1] - l2[1],2))
+            aux = fitness_standard_traveling(aux)
             l.append(aux)
+        # print('POP',population)
+        # print('FITNESS',l)
     if typePopulation == 5:
         # fitness da funcao algebrica para maximizar o valor
         binPopulation = bin_population_calc(ilPopulation,slPopulation,precisionPopulation)
@@ -155,6 +158,11 @@ def bin_to_real_radio(individual,lowerBit,upperBit,t):
 def fitness_standard_algebra(x):
     # standarlization for algebra function problem
     x = (4 + x)/(2 + 4)
+    return x
+
+def fitness_standard_traveling(x):
+    # standarlization for Traveling Salesman Problem
+    x = 13 - x
     return x
 
 def fitness_standard_ackley(x):
@@ -442,12 +450,8 @@ def elitism_find(f,p):
     return best
 
 def elitism_act(p,best):
-    # print("##########################################################")
-    # print(p)
     p.pop(0)
     p.insert(0,best)
-    # print(p)
-    # print("##########################################################")
     return p
 
 def plotDiversity(problem,diversity):
@@ -558,12 +562,10 @@ if typePopulation == 6:
 
 #  MAIN LOOP
 populate()
-# print(population)
 # print("---------------------------------\n")
 for gen in range(generationsPopulation):
     diversityList.append(diversity_calc())
     fitness = fitness_calc()
-    # print(fitness)
     bestPopulation = elitism_find(fitness,population)
     newPopulation = selection(fitness,gen,tour)
     population = crossover(newPopulation)
