@@ -19,7 +19,7 @@ def populate():
             for j in range(chromoPopulation):
                 individual.append(uniform(ilPopulation,slPopulation))
             population.append(individual)
-        if typePopulation == 4:
+        if typePopulation == 4 or typePopulation == 7:
             population.append(sample(range(0,chromoPopulation),chromoPopulation))
         if typePopulation == 5:
             binPopulation = bin_population_calc(ilPopulation,slPopulation,precisionPopulation)
@@ -135,7 +135,22 @@ def fitness_calc():
             r = -1
             aux = funcObj + r*penalty
             l.append(aux)
+    if typePopulation == 7:
+        for i in range(nPopulation):
+            aux = 0
+            l = []
+            for j in range(chromoPopulation):
+                l.append([j,population[i][j]])
+            print(l)
+            # for j in range(chromoPopulation)
+            #     diag = diagonal_find(population[i], j)
+            #     aux += chromoPopulation - 1 - diag
+            # l.append(aux)
     return l
+
+def diagonal_find(p,c):
+
+    return x
 
 def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
     i = 0
@@ -504,14 +519,14 @@ def find_fitness(fl,np):
         averageList.append(mean)
     return averageList,bestList
 
-typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM, 5-CODBIN e 6-RADIO:\n")
+typePopulation = input("Escolha uma codificacao 1-BIN, 2-INT, 3-REAL, 4-INTPERM, 5-CODBIN, 6-RADIO e 7-NRAINHAS:\n")
 typePopulation = int(typePopulation)
 if typePopulation == 6:
     il1Population = input("Escolha uma limite inferior primeira variavel:\n")
     sl1Population = input("Escolha uma limite superior primeira variavel:\n")
     il2Population = input("Escolha uma limite inferior segunda variavel:\n")
     sl2Population = input("Escolha uma limite superior segunda variavel:\n")
-if typePopulation != 1 and typePopulation != 4 and typePopulation != 6:
+if typePopulation != 1 and typePopulation != 4 and typePopulation != 6 and typePopulation != 7:
     ilPopulation = input("Escolha uma limite inferior:\n")
     slPopulation = input("Escolha uma limite superior:\n")
 nPopulation = input("Escolha a quantidade de individuos:\n")
@@ -526,7 +541,7 @@ if typePopulation == 6:
     sl1Population = int(sl1Population)
     il2Population = int(il2Population)
     sl2Population = int(sl2Population)
-if typePopulation != 1 and typePopulation != 4 and typePopulation != 6:
+if typePopulation != 1 and typePopulation != 4 and typePopulation != 6 and typePopulation != 7:
     ilPopulation = int(ilPopulation)
     slPopulation = int(slPopulation)
 nPopulation = int(nPopulation)
@@ -558,6 +573,8 @@ if typePopulation == 6:
     problem = 'radio'
     bin1Population = bin_population_calc(il1Population,sl1Population,precisionPopulation)
     bin2Population = bin_population_calc(il2Population,sl2Population,precisionPopulation)
+if typePopulation == 7:
+    problem = 'nrainhas'
 # END VARIABLES
 
 #  MAIN LOOP
