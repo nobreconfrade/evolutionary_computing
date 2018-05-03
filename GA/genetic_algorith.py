@@ -36,7 +36,7 @@ def populate():
 
 def diversity_calc():
     diversityValue = 0
-    if typePopulation == 2 or typePopulation == 4:
+    if typePopulation == 2 or typePopulation == 4 or typePopulation == 7:
         for i in range(nPopulation-1):
             for j in range(i+1,nPopulation):
                 aux = list(zip(population[i],population[j]))
@@ -138,18 +138,20 @@ def fitness_calc():
     if typePopulation == 7:
         for i in range(nPopulation):
             aux = 0
-            l = []
+            laux = []
             for j in range(chromoPopulation):
-                l.append([j,population[i][j]])
-            print(l)
-            # for j in range(chromoPopulation)
-            #     diag = diagonal_find(population[i], j)
-            #     aux += chromoPopulation - 1 - diag
-            # l.append(aux)
+                laux.append([j,population[i][j]])
+            for j in range(chromoPopulation):
+                diag = diagonal_find(laux,j)
+                aux += chromoPopulation - 1 - diag
+            l.append(aux)
     return l
 
 def diagonal_find(p,c):
-
+    x = 0
+    for i in range(chromoPopulation):
+            if abs(p[c][0] - p[i][0]) == abs(p[c][1] - p[i][1]) and c != i:
+                x += 1
     return x
 
 def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
@@ -276,7 +278,7 @@ def crossover_probability(p):
 
 def crossover(newPopulation):
     lfinal = []
-    prob = 0.8
+    prob = 0.80
     if typePopulation == 1 or typePopulation == 5 or typePopulation == 6:
         '''SINGLE'''
         for i in range(0,len(newPopulation),2):
@@ -316,7 +318,7 @@ def crossover(newPopulation):
                 p1,p2 = average_uniform_calc(mask,newPopulation[i],newPopulation[i+1])
                 lfinal.append(p1)
                 lfinal.append(p2)
-    if typePopulation == 4:
+    if typePopulation == 4 or typePopulation == 7:
         '''PMX'''
         for i in range(0,len(newPopulation),2):
             if (crossover_probability(prob) == False):
@@ -441,7 +443,7 @@ def mutation(population):
                     population[i][j] = float(numpy.random.normal(population[i][j],stdev,1))
                 else:
                     pass
-    if typePopulation == 4:
+    if typePopulation == 4 or typePopulation == 7:
         '''SWAP'''
         for i in range(len(population)):
             for j in range(len(population[i])):
@@ -590,6 +592,9 @@ for gen in range(generationsPopulation):
     population = elitism_act(population,bestPopulation)
     fitnessList.append(fitness)
 averageFitness,bestFitness = find_fitness(fitnessList,nPopulation)
+# print("Melhor solução: ",population[fitness.index(bestFitness[generationsPopulation-1])])
+print(fitness)
+print(population)
 diversityList = diversity_standarlization(diversityList)
 averageFitness,bestFitness = fitness_standarlization(averageFitness,bestFitness)
 plotDiversity(problem,diversityList)
