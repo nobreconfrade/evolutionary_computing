@@ -143,7 +143,9 @@ def fitness_calc():
                 laux.append([j,population[i][j]])
             for j in range(chromoPopulation):
                 diag = diagonal_find(laux,j)
+                pw = position_weight(laux,j)
                 aux += chromoPopulation - 1 - diag
+                aux *= pw
             l.append(aux)
     return l
 
@@ -152,6 +154,13 @@ def diagonal_find(p,c):
     for i in range(chromoPopulation):
             if abs(p[c][0] - p[i][0]) == abs(p[c][1] - p[i][1]) and c != i:
                 x += 1
+    return x
+
+def position_weight(p,c):
+    if p[c][1] % 2 == 0:
+        x = p[c][0]
+    else:
+        x = abs(p[c][0] - chromoPopulation)
     return x
 
 def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
@@ -592,9 +601,9 @@ for gen in range(generationsPopulation):
     population = elitism_act(population,bestPopulation)
     fitnessList.append(fitness)
 averageFitness,bestFitness = find_fitness(fitnessList,nPopulation)
-# print("Melhor solução: ",population[fitness.index(bestFitness[generationsPopulation-1])])
-print(fitness)
-print(population)
+print("Melhor solução: ",population[fitness.index(bestFitness[generationsPopulation-1])])
+# print(fitness)
+# print(population)
 diversityList = diversity_standarlization(diversityList)
 averageFitness,bestFitness = fitness_standarlization(averageFitness,bestFitness)
 plotDiversity(problem,diversityList)
