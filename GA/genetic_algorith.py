@@ -141,6 +141,7 @@ def fitness_calc():
             laux = []
             for j in range(chromoPopulation):
                 laux.append([j,population[i][j]])
+                # print(laux)
             for j in range(chromoPopulation):
                 diag = diagonal_find(laux,j)
                 pw = position_weight(laux,j)
@@ -157,10 +158,12 @@ def diagonal_find(p,c):
     return x
 
 def position_weight(p,c):
-    if p[c][1] % 2 == 0:
-        x = p[c][0]
+    # p[c][0] ROW
+    # p[c][1] COL
+    if p[c][0] % 2 == 0:
+        x = log10(8*(p[c][0]+1)+(p[c][1]+1))
     else:
-        x = abs(p[c][0] - chromoPopulation)
+        x = sqrt(8*(p[c][0]+1)+(p[c][1]+1))
     return x
 
 def bin_population_calc(ilPopulation,slPopulation,precisionPopulation):
@@ -334,11 +337,28 @@ def crossover(newPopulation):
                 lfinal.append(newPopulation[i])
                 lfinal.append(newPopulation[i+1])
             else:
+                 print("ANTES DO CV")
+                 debugPerm(newPopulation[i])
+                 debugPerm(newPopulation[i+1])
                  cut1,cut2 = sample(range(1,chromoPopulation),2)
                  p1,p2 = pmx(cut1,cut2,newPopulation[i],newPopulation[i+1])
+                 print("DEPOIS DO CV")
+                 debugPerm(p1)
+                 debugPerm(p2)
                  lfinal.append(p1)
                  lfinal.append(p2)
     return lfinal
+
+def debugPerm(arg):
+    for i in arg:
+        count = 0
+        for j in range(len(arg)):
+            if i is arg[j]:
+                count += 1
+            if count == 2:
+                print(arg)
+                exit()
+    return
 
 def single_cut(cut,p1,p2):
     p1init,p1end = bit_split_single(cut,p1)
@@ -369,10 +389,12 @@ def average_uniform_calc(m,p1,p2):
 def pmx(c1,c2,p1,p2):
     p1init,p1mid,p1end = bit_split_double(c1,c2,p1)
     p2init,p2mid,p2end = bit_split_double(c1,c2,p2)
-    p1aux = p1mid
-    p2aux = p2mid
-    p1mid = p2aux
-    p2mid = p1aux
+    p1aux = p1mid.copy()
+    p2aux = p2mid.copy()
+    p1mid = p2aux.copy()
+    p2mid = p1aux.copy()
+    print("P1",p1init,p1mid,p1end)
+    print("P2",p2init,p2mid,p2end)
     for i in p1init:
         if i in p1mid:
             j = p1mid.index(i)
@@ -390,7 +412,9 @@ def pmx(c1,c2,p1,p2):
             j = p2mid.index(i)
             p2end[p2end.index(i)] = p2aux[j]
     p1 = p1init + p1mid + p1end
+    print('P1',p1)
     p2 = p2init + p2mid + p2end
+    print('P2',p2)
     return p1,p2
 
 def bit_split_double(c1,c2,p):
